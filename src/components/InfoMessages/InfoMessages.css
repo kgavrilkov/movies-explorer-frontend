@@ -1,0 +1,53 @@
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 1280px;
+  min-height: calc(100vh - 302px - 172px);
+  z-index: 10;
+  padding: 20px;
+  background-color: #202020;
+  box-sizing: border-box;
+}
+
+.info__message {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 1.21;
+  text-align: center;
+  color: #8B8B8B;
+}
+
+.info__button {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 1.23;
+  color: #FFFFFF;
+  background-color: transparent;
+  border: 1px solid #424242;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.info__button:hover {
+  transform: scale(1.05);
+}
+
+.info__button:active {
+  transform: scale(1);
+}
+
+@media screen and (max-width: 600px) {
+  .info__message {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .info__message {
+    font-size: 15px;
+  }
+}
