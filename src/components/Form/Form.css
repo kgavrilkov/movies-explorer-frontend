@@ -29,7 +29,7 @@
   color: #FFFFFF;
 }
 
-input.form__input:focus {
+.form__input:focus {
   outline: none;
   border: 1px solid #4285F4;
 }

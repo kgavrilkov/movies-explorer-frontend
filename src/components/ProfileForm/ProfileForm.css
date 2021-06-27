@@ -38,11 +38,11 @@
   text-align: right;
 }
 
-input:focus {
-  border: none;
+.profile__input:focus {
+  outline: none;
 }
 
-input::placeholder {
+.profile__input::placeholder {
   color: #FFFFFF;
 }
 
