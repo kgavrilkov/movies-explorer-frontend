@@ -6,7 +6,7 @@ function SearchForm() {
     <section className="finder">
       <div className="container container_presentation">
         <form className="finder__form">
-          <input type="text" className="finder__input" placeholder="Фильм" />
+          <input type="text" className="finder__input" required placeholder="Фильм" />
           <button type="submit" className="finder__button"></button>
         </form>
         <label className="finder__label">
