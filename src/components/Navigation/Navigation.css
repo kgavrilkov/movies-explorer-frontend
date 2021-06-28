@@ -1,0 +1,241 @@
+.navigation__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 182px;
+  min-height: 32px;
+  margin: 21px 0;
+}
+
+.navigation__link {
+  margin-right: 30px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.33;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: opacity 1s linear 0.5s;
+}
+
+.navigation__link:last-of-type {
+  margin-right: 0;
+}
+
+.navigation__link:hover {
+  opacity: .6;
+}
+
+.navigation__link-content {
+  width: 76px;
+  margin: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background-color: #3DDC84;
+  border-radius: 3px;
+  color: #000000;
+  text-align: center;
+}
+
+.navigation__container {
+  display: flex;
+  justify-content: space-between;
+  width: 1058px;
+  margin-left: 44px;
+}
+
+.navigation__list_profile {
+  width: 100px;
+}
+
+.navigation__link_profile {
+  margin-right: 17px;
+  font-size: 14px;
+  line-height: 1.14;
+}
+
+.navigation__image {
+  width: 26px;
+  height: 30px;
+  background-color: #313131;
+  background-image: url(../../images/icon-man.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 4px;
+}
+
+.navigation__list_movies {
+  max-width: 212px;
+}
+
+.navigation__link_movies {
+  margin-right: 16px;
+  font-size: 13px;
+  line-height: 1.38;
+}
+
+.navigation__link_saved-movies {
+  font-weight: normal;
+}
+
+.navigation__button-open {
+  position: relative;
+  display: none;
+  margin: 25px 6px;
+  width: 28px;
+  height: 20px;
+  background-color: transparent;
+  border-top: 3px solid white;
+  border-right: none;
+  border-bottom: 3px solid white;
+  border-left: none;
+  transition: opacity 1s linear 0.5s;
+  cursor: pointer;
+}
+
+.navigation__button-open::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  border-top: 3px solid white;
+}
+
+.navigation__button-open:hover {
+  opacity: .6;
+}
+
+.navigation__menu {
+  display: none;
+  justify-content: flex-end;
+  align-items: stretch;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .3);
+}
+
+.navigation__menu_opened {
+  display: flex;
+}
+
+.navigation__menu-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 520px;
+  background-color: #202020;
+}
+
+.navigation__menu-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 340px;
+  margin-top: 159px;
+  margin-bottom: 92px;
+}
+
+.navigation__menu-list {
+  display: grid;
+  justify-items: center;
+  row-gap: 28px;
+}
+
+.navigation__menu-link {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.22;
+  text-decoration: none;
+  color: #FFFFFF;
+  transition: opacity 1s linear 0.5s;
+}
+
+.navigation__menu-link:hover {
+  opacity: .6;
+}
+
+.navigation__menu-link_active {
+  padding-bottom: 4px;
+  border-bottom: 2px solid #FFFFFF;
+}
+
+.navigation__list_menu {
+  align-self: center;
+  width: 100px;
+  margin: 0;
+}
+
+.navigation__menu-link_profile {
+  font-size: 14px;
+  line-height: 1.14;
+}
+
+.navigation__menu-button {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 22px;
+  right: 22px;
+  background-image: url(../../images/button.svg);
+  background-color: transparent;
+  background-position: center;
+  border: none;
+  transition: opacity 1s linear 0.5s;
+  cursor: pointer;
+}
+
+.navigation__menu-button:hover {
+  opacity: .6;
+}
+
+@media screen and (max-width: 768px) {
+  .navigation__container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navigation__button-open {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .navigation__link {
+    margin-right: 14px;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .navigation__link-content {
+    width: 54px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .navigation__menu-content {
+    width: 300px;
+    margin-top: 144px;
+    margin-bottom: 48px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .navigation__menu-list {
+    row-gap: 24px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .navigation__menu-button {
+    top: 13px;
+    right: 13px;
+  }
+}

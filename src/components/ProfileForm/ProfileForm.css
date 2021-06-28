@@ -1,0 +1,110 @@
+.profile__form {
+  display: flex;
+  flex-direction: column;
+  margin: 123px 0 16px;
+  width: 410px;
+}
+
+.profile__form-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile__label {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.18;
+}
+
+.profile__input-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.profile__input {
+  max-width: 122px;
+  min-height: 14px;
+  background-color: transparent;
+  border: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 1.18;
+  color: #FFFFFF;
+  text-align: right;
+}
+
+.profile__input:focus {
+  outline: none;
+}
+
+.profile__input::placeholder {
+  color: #FFFFFF;
+}
+
+.profile__line {
+  margin: 17px 0 17px;
+  border: none;
+  border-bottom: 1px solid #424242;
+}
+
+.profile__button {
+  margin: 220px auto 0;
+  border: none;
+  background-color: transparent;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 1.23;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.profile__button:hover {
+  transform: scale(1.05);
+}
+
+.profile__button:active {
+  transform: scale(1);
+}
+
+.profile__button:disabled {
+  pointer-events: none;
+}
+
+@media screen and (max-width: 768px) {
+  .profile__form {
+    margin: 96px 0 16px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile__button {
+    margin: 210px auto 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .profile__form {
+    width: 340px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .profile__form {
+    margin: 80px 0 16px;
+    width: 260px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .profile__button {
+    margin: 379px auto 0;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}

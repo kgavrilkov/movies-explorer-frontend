@@ -1,0 +1,128 @@
+.portfolio {
+  max-width: 1280px;
+  background-color: #202020;
+  border: 1px solid #202020;
+}
+
+.portfolio-content {
+  max-width: 1140px;
+  margin: 100px 0 125px;
+}
+
+.portfolio-title {
+  max-width: 250px;
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 1.11;
+  color: #8B8B8B;
+}
+
+.portfolio-list {
+  display: grid;
+  grid-template-rows: repeat(3, 50px);
+  row-gap: 40px;
+  margin: 50px 0 0;
+  list-style-type: none;
+  padding: 0;
+}
+
+.portfolio-item {
+  display: flex;
+  justify-content: space-between;
+  min-height: 69px;
+  border-bottom: 1px solid #424242;
+}
+
+.portfolio-item:last-of-type {
+  border-bottom: none;
+}
+
+.portfolio-link {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 1.67;
+  text-decoration: none;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  transition: opacity 1s linear 0.5s;
+}
+
+.portfolio-link:hover {
+  opacity: .6;
+}
+
+@media screen and (max-width: 1000px) {
+  .portfolio-content {
+    margin: 90px 0 90px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .portfolio-title {
+    color: #A0A0A0;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .portfolio-item {
+    border-bottom: 1px solid #E6E6E6;
+  }  
+}
+
+@media screen and (max-width: 1000px) {
+  .portfolio-link {
+    font-size: 28px;
+    line-height: 1.79;
+  }  
+}
+
+@media screen and (max-width: 720px) {
+  .portfolio-title {
+    margin: 0 auto;
+    text-align: center;
+  }  
+}
+
+@media screen and (max-width: 480px) {
+  .portfolio-link {
+    font-size: 23px;
+  }  
+}
+
+@media screen and (max-width: 400px) {
+  .portfolio-content {
+    margin: 69px 0 70px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .portfolio-title {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.43;
+    text-align: left;
+  }  
+}
+
+@media screen and (max-width: 400px) {
+  .portfolio-list {
+    grid-template-rows: repeat(3, 28px);
+    margin: 40px 0 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .portfolio-item {
+    min-height: 49px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .portfolio-link {
+    font-size: 18px;
+    line-height: 1.56;
+  }  
+}

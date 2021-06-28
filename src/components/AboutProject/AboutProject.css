@@ -1,0 +1,274 @@
+.description {
+  max-width: 1280px;
+  background-color: #202020;
+  border: 1px solid #202020;
+}
+
+.description__content {
+  margin: 110px 0;
+}
+
+.heading {
+  max-width: 1140px;
+  min-height: 50px;
+}
+
+.heading__title {
+  max-width: 1140px;
+  min-height: 27px;
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 22px;
+  line-height: 1.23;
+}
+
+.heading__title::after {
+  content: "";
+  display: block;
+  margin-top: 23px;
+  background-color: #DADADA;
+  height: 1px;
+}
+
+.description__info {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1140px;
+  min-height: 90px;
+  margin: 70px 0 110px;
+}
+
+.description__info-item {
+  max-width: 550px;
+  margin-right: 40px;
+}
+
+.description__info-item:last-of-type {
+  margin-right: 0;
+}
+
+.description__info-title {
+  max-width: 550px;
+  min-height: 24px;
+  margin: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.description__info-text {
+  max-width: 550px;
+  min-height: 40px;
+  margin: 26px 0 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.43;
+
+}
+
+.description__deadlines {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 36px 17px;
+  row-gap: 14px;
+  max-width: 1140px;
+  margin: 0;
+}
+
+.description__deadline {
+  max-width: 228px;
+  min-height: 36px;
+  background-color: #3DDC84;
+}
+
+.description__deadline-length {
+  max-width: 200px;
+  min-height: 17px;
+  margin: 9px auto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #000000;
+  text-align: center;
+}
+
+.description__deadline_backend {
+  grid-column: 1;
+  min-height: 17px;
+  background-color: #202020;
+}
+
+.description__deadline-length_backend {
+  margin: 0 auto;
+  color: #8B8B8B;
+}
+
+.description__deadline_frontend {
+  grid-column: 2;
+  grid-row: 1;
+  max-width: 912px;
+  background-color: #303030;
+}
+
+.description__deadline-length_frontend {
+  margin: 9px auto;
+  color: #FFFFFF;
+}
+
+.description__deadline_name {
+  max-width: 912px;
+  min-height: 17px;
+  background-color: #202020;
+}
+
+.description__deadline-length_name {
+  margin: 0 auto;
+  color: #8B8B8B;
+}
+
+@media screen and (max-width: 920px) {
+  .container_description {
+    margin: 0 50px;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .description__content {
+    margin: 90px 0;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .description__info {
+    margin: 70px 0 93px;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .description__info-text {
+    margin: 22px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+@media screen and (max-width: 755px) {
+  .container_description {
+    margin: 0 30px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .description__content {
+    margin: 70px 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .heading__title::after {
+    margin-top: 25px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .description__info {
+    flex-direction: column;
+    margin: 60px 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .description__info-item {
+    margin-right: 0;
+    margin-bottom: 56px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .description__info-item:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .description__info-text {
+    margin: 16px 0 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .container_description {
+    margin: 0 17px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .heading__title {
+    font-size: 18px;
+    line-height: 1.22;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__info-title {
+    font-size: 17px;
+    line-height: 1.22;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__info-text {
+    font-size: 11px;
+    line-height: 1.46;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__deadlines {
+    grid-template-columns: 35% 65%;
+    grid-template-rows: 35px 13px;
+    row-gap: 10px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__deadline-length {
+    margin: 11px auto;
+    font-size: 11px;
+    line-height: 1.18;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__deadline_backend {
+    min-height: 13px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__deadline-length_backend {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__deadline_name {
+    min-height: 13px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .description__deadline-length_name {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 325px) {
+  .heading__title::after {
+    height: 4px;
+  }
+}
