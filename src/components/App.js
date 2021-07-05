@@ -9,8 +9,22 @@ import Register from './Register/Register.js';
 import Login from './Login/Login.js';
 import PageNotFound from './PageNotFound/PageNotFound.js'; 
 import Footer from './Footer/Footer.js'
+import api from '../utils/MoviesApi.js';
 
 function App() {
+  const [cards, setCards] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    api.getInitialCards()
+      .then((cardData) => {
+        setCards(cardData);
+      })
+      .catch(err => console.log(`Ошибка при загрузке карточек: ${err}`))
+      .finally(() => setIsLoading(false));
+  }, []);
+
   return (
     <div className="app">
       <Header/>
@@ -19,7 +33,10 @@ function App() {
           <Main />
         </Route>
         <Route path="/movies">
-          <Movies />
+          <Movies
+          cards={cards}
+          isLoading={isLoading}  
+          />
         </Route>
         <Route path="/saved-movies">
           <SavedMovies />

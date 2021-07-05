@@ -4,13 +4,13 @@ import Preloader from '../Preloader/Preloader.js';
 import InfoMessages from '../InfoMessages/InfoMessages.js';
 import MoviesCardList from '../MoviesCardList/MoviesCardList.js';
 
-function Movies() {
+function Movies({ cards, isLoading }) {
   return(
     <div className="movies">
       <SearchForm />
-      <Preloader />
+      <Preloader isLoading={isLoading} />
       <InfoMessages />
-      <MoviesCardList />
+      <MoviesCardList cards={cards} />
     </div>
   );
 }
