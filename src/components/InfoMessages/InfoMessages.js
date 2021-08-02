@@ -2,17 +2,11 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './InfoMessages.css';
 
-function InfoMessages() {
-  const [isSelected, setIsSelected] = React.useState();
-
-  function handleClick() {
-    setIsSelected(!isSelected);
-  }
-
-  const message = isSelected ? 'Во время запроса произошла ошибка. Подождите немного и попробуйте ещё раз.' : 'Ничего не найдено';
+function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessages }) {
+  const message = falseLoading ? falseLoading && 'Во время запроса произошла ошибка. Подождите немного и попробуйте ещё раз.' : (infoMoviesMessages && 'Ничего не найдено') || (infoSavedMoviesMessages && 'Ничего не найдено');
 
   const cssRules = {
-    display: 'none',
+    display: 'flex',
     alignItems: 'flex-end',
     marginTop: 5,
     minHeight: 12,
@@ -28,7 +22,7 @@ function InfoMessages() {
   };
 
   const cssRules2 = {
-    display: 'none',
+    display: 'flex',
     alignItems: 'flex-start',
     marginTop: -10,
     minHeight: 12,
@@ -37,10 +31,9 @@ function InfoMessages() {
 
   return (
     <Switch>
-      <Route path="/movies">
-        <div className="info" style={{display: 'none'}}>
+      <Route path="/(movies|saved-movies)">
+        <div className="info">
           <span className="info__message">{message}</span>
-          <button className="info__button" onClick={handleClick}>Временная кнопка</button>
         </div>
       </Route>
       <Route path="/profile">

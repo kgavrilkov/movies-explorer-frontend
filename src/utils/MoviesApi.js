@@ -1,5 +1,5 @@
-class Api {
-  constructor({address}) {
+class MoviesApi {
+  constructor({ address }) {
     this._address = address;
   }
 
@@ -13,8 +13,8 @@ class Api {
   }
 }
 
-const api = new Api ({
+const moviesApi = new MoviesApi ({
   address: 'https://api.nomoreparties.co/beatfilm-movies'
 });
 
-export default api;
+export default moviesApi;

@@ -1,15 +1,13 @@
 import React from 'react'
 import './Preloader.css'
 
-function Preloader({ isLoading }) {
+function Preloader() {
   return (
-    <>
-      {isLoading && <div className="preloader">
-        <div className="preloader__container">
-          <span className="preloader__round"></span>
-        </div>
-      </div>}
-    </>
+    <div className="preloader">
+      <div className="preloader__container">
+        <span className="preloader__round"></span>
+      </div>
+    </div>
   );
 }
 

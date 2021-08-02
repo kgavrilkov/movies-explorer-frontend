@@ -1,12 +1,12 @@
 import React from 'react';
 import './SearchForm.css';
 
-function SearchForm() {
+function SearchForm({ setFilterText, handleSearch }) {
   const [name, setName] = React.useState('');
   const [nameDirty, setNameDirty] = React.useState(false);
   const [nameError, setNameError] = React.useState('Нужно ввести ключевое слово.');
   const [formValid, setFormValid] = React.useState(false);
-  const [isSwitched, setIsSwitched] = React.useState(false);
+  const [shortMovies, setShortMovies] =React.useState(false);
 
   const focusHandler = (evt) => {
     if (evt.target.name) {
@@ -17,6 +17,7 @@ function SearchForm() {
   const nameHandler = (evt) => {
     setName(evt.target.value);
     setNameError(false);
+    setFilterText(evt.target.value.toLowerCase());
   };
 
   const errorStyle = {
@@ -37,16 +38,24 @@ function SearchForm() {
     }
   }, [nameError]);
 
-  function handleSwitchClick() {
-    setIsSwitched(!isSwitched);
-  }
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleSearch(shortMovies);
+    setName('');
+  };
 
-  const className = `finder__switch-button ${isSwitched ? 'finder__switch-button_active' : 'finder__switch-button'}`;
+  const selectShortMovies = (evt) => {
+    if (evt.target.checked) {
+      setShortMovies(true);
+    } else {
+      setShortMovies(false);
+    }
+  };
 
   return(
     <section className="finder">
       <div className="container container_presentation">
-        <form className="finder__form" noValidate>
+        <form className="finder__form" onSubmit={(evt) => handleSubmit(evt)} noValidate>
           <div className="finder__input-section">
             <input className="finder__input" type="text" name="name" 
             value={name} onFocus={evt => focusHandler(evt)} 
@@ -56,7 +65,7 @@ function SearchForm() {
           <button type="submit" className="finder__button" disabled={!formValid}></button>
         </form>
         <div className="finder__switch-section">
-          <button className={className} onClick={handleSwitchClick}></button>
+          <input type="checkbox" onChange={evt => selectShortMovies(evt)} />
           <span className="finder__switch-section-title">Короткометражки</span>
         </div>
         <hr className="finder__line" />
