@@ -1,88 +1,74 @@
+export const BASE_URL='https://api.filman.kirill.nomoredomains.monster';
 export const URL = 'https://api.nomoreparties.co';
 
-class MainApi {
-  constructor({ address, token }) {
-    this._address = address;
-    this._token = token;
-  }
-
-  getResponseData(res) {
-    return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-  }
-
-  getUserInfo() { 
-    return fetch(`${this._address}/users/me`, { 
-      headers: { 
-        authorization: this._token 
-      } 
-    }) 
-    .then(this.getResponseData) 
-  }
+export const getResponseData = (response) => response.ok ? response.json() : Promise.reject(`Ошибка: ${response.status}`);
   
-  setUserInfo({name, email}) { 
-    return fetch(`${this._address}/users/me`, { 
-      method: 'PATCH', 
-      headers: { 
-        authorization: this._token, 
-        'Content-Type': 'application/json' 
-      }, 
-      body: JSON.stringify({ 
-        name, 
-        email 
-      }) 
+
+export const getUserInfo = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    } 
+  })
+  .then(getResponseData) 
+};
+  
+export const setUserInfo = (token, {name, email}) => { 
+  return fetch(`${BASE_URL}/users/me`, { 
+    method: 'PATCH', 
+    headers: { 
+      authorization: `Bearer ${token}`, 
+      'Content-Type': 'application/json' 
+    }, 
+    body: JSON.stringify({ 
+      name, 
+      email 
     }) 
-    .then(this.getResponseData) 
-  } 
+  }) 
+  .then(getResponseData) 
+} 
 
-  getMovies() {
-    return fetch(`${this._address}/movies`, {
-      method: 'GET',
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(this.getResponseData) 
-  }
-
-  saveMovie(movie) {
-    return fetch(`${this._address}/movies`, {
-      method: 'POST',
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        nameRU: movie.nameRU,
-        nameEN: movie.nameEN,
-        director: movie.director,
-        country: movie.country,
-        year: movie.year,
-        duration: movie.duration,
-        description: movie.description,
-        trailer: movie.trailerLink,
-        image: URL + movie.image.url,
-        thumbnail: URL + movie.image.formats.thumbnail.url,
-        movieId: movie.id
-      })
-    })
-    .then(this.getResponseData)
-  }
-
-  deleteMovie(movieId) {
-    return fetch(`${this._address}/movies/${movieId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token
-      }
-    })
-    .then(this.getResponseData)
-  }
+export const getMovies = (token) => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(getResponseData) 
 }
 
-const mainApi = new MainApi ({
-  address: 'https://api.filman.kirill.nomoredomains.monster',
-  token: `Bearer ${localStorage.getItem('token')}`
-});
+export const saveMovie = (token, movie) => {
+  return fetch(`${BASE_URL}/movies`, {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      nameRU: movie.nameRU,
+      nameEN: movie.nameEN,
+      director: movie.director,
+      country: movie.country,
+      year: movie.year,
+      duration: movie.duration,
+      description: movie.description,
+      trailer: movie.trailerLink,
+      image: URL + movie.image.url,
+      thumbnail: URL + movie.image.formats.thumbnail.url,
+      movieId: movie.id
+    })
+  })
+  .then(getResponseData)
+}
 
-export default mainApi;
+export const deleteMovie = (token, movieId) => {
+  return fetch(`${BASE_URL}/movies/${movieId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  })
+  .then(getResponseData)
+}

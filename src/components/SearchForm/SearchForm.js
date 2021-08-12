@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import './SearchForm.css';
 
-function SearchForm({ setFilterText, handleSearch }) {
+function SearchForm({ setFilterText, handleSearch, handleCheck }) {
   const [name, setName] = React.useState('');
   const [nameDirty, setNameDirty] = React.useState(false);
   const [nameError, setNameError] = React.useState('Нужно ввести ключевое слово.');
@@ -40,14 +41,16 @@ function SearchForm({ setFilterText, handleSearch }) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    handleSearch(shortMovies);
+    handleSearch();
     setName('');
   };
 
   const selectShortMovies = (evt) => {
     if (evt.target.checked) {
+      handleCheck();
       setShortMovies(true);
     } else {
+      handleSearch();
       setShortMovies(false);
     }
   };

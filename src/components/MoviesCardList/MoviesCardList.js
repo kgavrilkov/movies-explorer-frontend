@@ -10,10 +10,10 @@ function MoviesCardList({ data, displayedMovies, allMovies, savedMovies, saveMov
     <section className="cards">
       <div className="container container_cards">
         <div className="cards__container">
-          {data.slice(0, displayedMovies).map((movie, index) => (
+          {data.slice(0, displayedMovies).map((movie, id) => (
             <MoviesCard 
               movie={movie}
-              key={index}
+              key={id}
               savedMovies={savedMovies}
               saveMovie={saveMovie}
               deleteMovie={deleteMovie}

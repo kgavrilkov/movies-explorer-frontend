@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import React from 'react';
 import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import Header from './Header/Header.js';
@@ -12,19 +13,20 @@ import PageNotFound from './PageNotFound/PageNotFound.js';
 import Footer from './Footer/Footer.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute.js';
-import moviesApi from '../utils/MoviesApi.js';
-import mainApi from '../utils/MainApi.js';
+import * as MoviesApi from '../utils/MoviesApi.js';
+import * as MainApi from '../utils/MainApi.js';
 import * as auth from '../utils/auth.js';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const initialData = { name: '', email: '', password: '' }; 
+  const initialData = { email: '', password: '' }; 
   const [data, setData] = React.useState(initialData); 
   const history = useHistory();
   const [infoMessages, setInfoMessages] = React.useState(false);
   const [infoLoginMessages, setInfoLoginMessages] = React.useState(false);
   const [infoProfileMessages, setInfoProfileMessages] = React.useState(false);
+  const [infoProfileUpdateMessages, setInfoProfileUpdateMessages] = React.useState(false);
   const [infoMoviesMessages, setInfoMoviesMessages] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [falseLoading, setFalseLoading] = React.useState(false);
@@ -43,66 +45,73 @@ function App() {
         .then((res) => { 
           if (res) { 
             setLoggedIn(true); 
-            setData(res);  
-            history.push('/movies'); 
-          } 
+            setData(res);
+            if (location.pathname === '/signin') {
+              history.push('/movies'); 
+            } else if (location.pathname === '/movies') {
+              history.push('/movies');
+            } else if (location.pathname === '/saved-movies') {
+              history.push('/saved-movies');
+            } else if (location.pathname === '/profile') {
+              setCurrentUser(JSON.parse(localStorage.getItem('user')));
+              history.push('/profile');
+            } 
+          }
         }) 
         .catch(() => history.push('/signin')); 
-    } 
+    }
   }, [history]);
 
-  React.useEffect(() => { 
+  React.useEffect(() => {
     tokenCheck(); 
   }, [tokenCheck, loggedIn]);
 
-  const handleRegister = ({ name, email, password }) => { 
+  const handleRegister = ({ name, email, password }) => {
+    setIsLoading(true);
     return auth.register(name, email, password).then(res => { 
       if (!res || res.statusCode===400) { 
         new Error('Что-то пошло не так!'); 
       } 
       if (res) {
-        history.push('/signin');
+        handleLogin({ email, password });
         setInfoMessages(false);
         return res;
       } 
     }) 
     .catch((err) => {
       setInfoMessages(true);
-    }); 
+    })
+    .finally(() => setIsLoading(false));
   };
   
-  const handleLogin = ({email, password}) => { 
-    return auth.authorize(email, password).then(res => { 
+  const handleLogin = ({email, password}) => {
+    setIsLoading(true);
+    return auth.authorize(email, password).then(res => {
       if (!res || res.statusCode===400) { 
         new Error('Что-то пошло не так!'); 
       } 
       if (res.token) { 
         setLoggedIn(true); 
-        auth.getContent(res.token) 
-          .then((res) => { 
-            if (res) { 
-              setData(res) 
-            } 
-          }) 
-          localStorage.setItem('token', res.token); 
-      } 
+        localStorage.setItem('token', res.token);
+      }
     }) 
     .then(() => history.push('/movies'), setInfoLoginMessages(false)) 
     .catch((err) => {  
       setInfoLoginMessages(true); 
-    }); 
+    })
+    .finally(() => setIsLoading(false));
   };
   
   const handleSignOut = () => { 
     localStorage.removeItem('token');  
     setLoggedIn(false);
-    setFilteredMovies([]); 
-    history.push('/'); 
+    setFilteredMovies([]);
+    history.push('/');
   };
 
   React.useEffect(() => {
     setIsLoading(true);
-    moviesApi.getInitialCards()
+    MoviesApi.getInitialCards()
       .then((movie) => {
         localStorage.setItem('movies', JSON.stringify(movie));
       })
@@ -113,10 +122,11 @@ function App() {
       .finally(() => setIsLoading(false));
   }, []);
 
-  React.useEffect(() => { 
+  React.useEffect(() => {
+    const token=localStorage.getItem('token'); 
     if (loggedIn) {
       setIsLoading(true);
-      mainApi.getMovies()
+      MainApi.getMovies(token)
         .then(() => {
           setMovies(JSON.parse(localStorage.getItem('movies')));
         })
@@ -129,7 +139,7 @@ function App() {
   }, [loggedIn]);
 
    React.useEffect(() => {
-    if (location.pathname === ('/movies')) {
+    if (location.pathname === ('/movies')) { 
       setArr(movies);
       setInfoMoviesMessages(false);
     } else if (location.pathname === ('/saved-movies')) {
@@ -138,16 +148,12 @@ function App() {
     }
   }, [location.pathname, movies]);
 
-  const handleSearch = (shortMovies) => {
+  const handleSearch = () => {
     const filtered = arr.filter((movie) => {
       if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
         return false
       } else {
-        if (shortMovies) {
-          return (movie.nameRU.toLowerCase().includes(filterText) && movie.duration <= 40) || (movie.nameEN.toLowerCase().includes(filterText) && movie.duration <= 40) || (movie.director.toLowerCase().includes(filterText) && movie.duration <= 40) || (movie.country.toLowerCase().includes(filterText) && movie.duration <= 40) || (movie.description.toLowerCase().includes(filterText) && movie.duration <= 40)
-          } else {
-            return movie.nameRU.toLowerCase().includes(filterText) || movie.nameEN.toLowerCase().includes(filterText) || movie.director.toLowerCase().includes(filterText) || movie.country.toLowerCase().includes(filterText) || movie.description.toLowerCase().includes(filterText)
-          }  
+        return movie.nameRU.toLowerCase().includes(filterText) || movie.nameEN.toLowerCase().includes(filterText) || movie.director.toLowerCase().includes(filterText) || movie.country.toLowerCase().includes(filterText) || movie.description.toLowerCase().includes(filterText) 
         } 
     });
     if (filtered.length === 0) {
@@ -159,13 +165,63 @@ function App() {
     }
     if (location.pathname === ('/movies')) {
       setFilteredMovies(filtered);
+      localStorage.setItem('filtered', JSON.stringify(filtered)); 
     } else if (location.pathname === ('/saved-movies')) {
       setSavedMovies(filtered);
+      localStorage.setItem('saved', JSON.stringify(filtered));
+    }
+  };
+
+  const handleCheck = () => {
+    if (location.pathname === '/movies') {
+      const arr = JSON.parse(localStorage.getItem('filtered'));
+      const filtered = arr.filter((movie) => {
+        if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
+          return false
+        } else {
+          return (movie.nameRU && movie.duration <= 40) || (movie.nameEN && movie.duration <= 40) || (movie.director && movie.duration <= 40) || (movie.country && movie.duration <= 40) || (movie.description && movie.duration <= 40)
+          } 
+      });
+      if (filtered.length === 0) {
+        setInfoMoviesMessages(true);
+        setInfoSavedMoviesMessages(true);
+      } else {
+        setInfoMoviesMessages(false);
+        setInfoSavedMoviesMessages(false);
+      }
+      if (location.pathname === ('/movies')) {
+        setFilteredMovies(filtered);
+      } else if (location.pathname === ('/saved-movies')) {
+        setSavedMovies(filtered);
+      }
+    }
+    if (location.pathname === '/saved-movies') {
+      const arr = JSON.parse(localStorage.getItem('saved'));
+      const filtered = arr.filter((movie) => {
+        if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
+          return false
+        } else {
+          return  movie.duration <= 40 
+        } 
+      });
+      if (filtered.length === 0) {
+        setInfoMoviesMessages(true);
+        setInfoSavedMoviesMessages(true);
+      } else {
+        setInfoMoviesMessages(false);
+        setInfoSavedMoviesMessages(false);
+      }
+      if (location.pathname === ('/movies')) {
+        setFilteredMovies(filtered);
+      } else if (location.pathname === ('/saved-movies')) {
+        setSavedMovies(filtered);
+      }
     }
   };
 
   const saveMovie = (movie) => {
-    mainApi.saveMovie(movie)
+    const token=localStorage.getItem('token');
+    MainApi.saveMovie(token, movie)
       .then((res) => {
         setSavedMovies([...savedMovies, { ...res, id: res.movieId }]);
       })
@@ -174,7 +230,8 @@ function App() {
 
   const deleteMovie = (movie) => {
     const movieId = savedMovies.find((item) => item.id === movie.id)._id;
-    mainApi.deleteMovie(movieId)
+    const token=localStorage.getItem('token');
+    MainApi.deleteMovie(token, movieId)
       .then((res) => {
         if (res.message === 'Фильм удалён') {
           const newArray = savedMovies.filter((item) => item._id !== movieId);
@@ -185,11 +242,13 @@ function App() {
   };
 
   React.useEffect(() => {
+    const token=localStorage.getItem('token');
     if (loggedIn) {
-      mainApi.getUserInfo() 
+      MainApi.getUserInfo(token) 
         .then((data) => { 
           setCurrentUser(data);
-          setInfoProfileMessages(false); 
+          setInfoProfileMessages(false);
+          localStorage.setItem('user', JSON.stringify(data)); 
         }) 
         .catch((err) => {
           console.log(`Ошибка при загрузке: ${err}`);
@@ -198,27 +257,35 @@ function App() {
     }   
   }, [loggedIn]);
 
-  const handleUpdateUser = (info) => { 
-    mainApi.setUserInfo(info) 
+  const handleUpdateUser = (info) => {
+    const token=localStorage.getItem('token');
+    setIsLoading(true);
+    MainApi.setUserInfo(token, info) 
       .then((data) => { 
         setCurrentUser(data);
-        setInfoProfileMessages(false); 
+        setInfoProfileMessages(false);
+        setInfoProfileUpdateMessages(true);
+        localStorage.setItem('user', JSON.stringify(data)); 
       }) 
       .catch((err) => {
         console.log(`Ошибка при обновлении: ${err}`);
         setInfoProfileMessages(true);
-      }); 
+        setInfoProfileUpdateMessages(false);
+      })
+      .finally(() => setIsLoading(false));
   }; 
 
   return (
     <div className="app">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header/>
+        <Header
+          loggedIn={loggedIn}
+        />
         <Switch>
           <Route exact path="/">
             <Main />
           </Route>
-          <ProtectedRoute path="/movies"
+          <ProtectedRoute path="/movies" 
             component={Movies}
             loggedIn={loggedIn}
             isLoading={isLoading}
@@ -227,6 +294,7 @@ function App() {
             infoMoviesMessages={infoMoviesMessages}
             data={filteredMovies}
             handleSearch={handleSearch}
+            handleCheck={handleCheck}
             savedMovies={savedMovies}
             saveMovie={saveMovie}
             deleteMovie={deleteMovie}
@@ -238,34 +306,39 @@ function App() {
             setFilterText={setFilterText}
             infoSavedMoviesMessages={infoSavedMoviesMessages}
             handleSearch={handleSearch}
+            handleCheck={handleCheck}
             savedMovies={savedMovies}
             saveMovie={saveMovie}
             deleteMovie={deleteMovie}
           />
-          <ProtectedRoute path="/profile"
+          <ProtectedRoute path="/profile" 
             component={Profile}
             loggedIn={loggedIn}
+            isLoading={isLoading}
             data={data}
             onUpdateUser={handleUpdateUser}
             infoProfileMessages={infoProfileMessages}
+            infoProfileUpdateMessages={infoProfileUpdateMessages}
             onSignOut={handleSignOut}
           />
           <Route path="/signup">
             <Register 
               onRegister={handleRegister}
+              isLoading={isLoading}
               infoMessages={infoMessages}
             />
           </Route>
           <Route path="/signin">
             <Login
               onLogin={handleLogin}
+              isLoading={isLoading}
               infoLoginMessages={infoLoginMessages} 
             />
           </Route>
           <Route path="*">
             <PageNotFound />
           </Route>
-        </Switch>  
+        </Switch> 
         <Footer />
       </CurrentUserContext.Provider>
     </div>

@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Preloader from '../Preloader/Preloader';
 import InfoMessages from '../InfoMessages/InfoMessages';
 import './Login.css';
 
-function Login({ onLogin, infoLoginMessages }) {
+function Login({ onLogin, isLoading, infoLoginMessages }) {
   const stateSchema = {
     email: { value: '', error: ''},
     password: { value: '', error: ''},
@@ -109,7 +110,7 @@ function Login({ onLogin, infoLoginMessages }) {
 
   return(
     <div className="login">
-      <form className="form" name="signin" onSubmit={handleSubmit} noValidate>
+      {isLoading ? <Preloader /> : <form className="form" name="signin" onSubmit={handleSubmit} noValidate>
         <label className="form__label">E-mail</label>
         <input className="form__input" type="email" name="email" 
         value={state.email.value} onChange={handleChange} required />
@@ -127,7 +128,7 @@ function Login({ onLogin, infoLoginMessages }) {
         <p className="form__info">Ещё не зарегистрированы?
           <Link className="form__link" to="/signup"> Регистрация</Link>
         </p>
-      </form>
+      </form>}
     </div>
   );
 }

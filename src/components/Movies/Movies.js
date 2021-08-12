@@ -5,7 +5,7 @@ import Preloader from '../Preloader/Preloader.js';
 import InfoMessages from '../InfoMessages/InfoMessages.js';
 import MoviesCardList from '../MoviesCardList/MoviesCardList.js';
 
-function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, data, handleSearch, savedMovies, saveMovie, deleteMovie }) {
+function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, data, handleSearch, handleCheck, savedMovies, saveMovie, deleteMovie }) {
   const [displayedMovies, setDisplayedMovies] = React.useState('');
   const mobile = useMediaQuery({ query: `(max-width: 320px)` });
   const tablet = useMediaQuery({ query: `(max-width: 768px)` });
@@ -37,7 +37,7 @@ function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, da
 
   return(
     <div className="movies">
-      <SearchForm setFilterText={setFilterText} handleSearch={handleSearch} />
+      <SearchForm setFilterText={setFilterText} handleSearch={handleSearch} handleCheck={handleCheck} />
       {isLoading && <Preloader />}
       {infoMoviesMessages && <InfoMessages falseLoading={falseLoading} infoMoviesMessages={infoMoviesMessages} />}
       {falseLoading && <InfoMessages falseLoading={falseLoading} infoMoviesMessages={infoMoviesMessages} />}

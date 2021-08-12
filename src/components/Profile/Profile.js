@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
+import Preloader from '../Preloader/Preloader.js';
 import InfoMessages from '../InfoMessages/InfoMessages.js';
 import './Profile.css';
 
-function Profile({ onUpdateUser, infoProfileMessages, onSignOut }) {
+function Profile({ onUpdateUser, isLoading, infoProfileMessages, infoProfileUpdateMessages, onSignOut }) {
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = React.useState(currentUser.name);
   const [email, setEmail] = React.useState(currentUser.email);
@@ -72,7 +73,7 @@ function Profile({ onUpdateUser, infoProfileMessages, onSignOut }) {
     if (isDirty) {
       setDisable(validateState());
     }
-  }, [state, isDirty, validateState]);
+  }, [state, isDirty]);
 
   const handleNameChange = React.useCallback(event => {
     setIsDirty(true);
@@ -131,13 +132,15 @@ function Profile({ onUpdateUser, infoProfileMessages, onSignOut }) {
 
   const handleSubmit = (evt) => { 
     evt.preventDefault();
-    onUpdateUser({name, email}) 
+    onUpdateUser({name, email});
+    setDisable(true);
   }; 
 
   return(
     <div className="profile">
       <div className="profile__container">
         <h2 className="profile__title">Привет, {name}!</h2>
+        {isLoading && <Preloader />} 
         <form className="profile__form" name="edit-profile" onSubmit={handleSubmit} noValidate>
           <div className="profile__form-item">
             <label className="profile__label">Имя</label>
@@ -156,7 +159,8 @@ function Profile({ onUpdateUser, infoProfileMessages, onSignOut }) {
               {state.email.error && <span style={errorStyle1}>{state.email.error}</span>}
             </div>
           </div>
-          {infoProfileMessages && <InfoMessages />}
+          {infoProfileMessages && <InfoMessages infoProfileUpdateMessages={infoProfileUpdateMessages} />}
+          {infoProfileUpdateMessages && <InfoMessages infoProfileUpdateMessages={infoProfileUpdateMessages} />}
           <button className="profile__button" type="submit" name="submit" disabled={disable}>
           Редактировать</button>
         </form>

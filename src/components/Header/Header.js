@@ -4,16 +4,28 @@ import logoPath from '../../images/logo.svg';
 import Navigation from '../Navigation/Navigation.js';
 import './Header.css';
 
-function Header() {
+function Header({ loggedIn }) {
   return(
     <Switch>
       <Route exact path="/">
+        {loggedIn 
+        ? 
+        <header className="header">
+          <div className="header__container">
+            <Link className="header__link" to="/">
+              <img className="logo" src={logoPath} alt="Логотип" />
+            </Link>
+            <Navigation loggedIn={loggedIn} />
+          </div>  
+        </header> 
+        : 
         <header className="header">
           <div className="header__container">
             <img className="logo" src={logoPath} alt="Логотип" />
-            <Navigation />
+            <Navigation loggedIn={loggedIn} />
           </div>  
         </header>
+        }
       </Route>
       <Route path="/(movies|saved-movies|profile)">
         <header className="header header_dark">
@@ -21,7 +33,7 @@ function Header() {
             <Link className="header__link" to="/">
               <img className="logo" src={logoPath} alt="Логотип" />
             </Link>
-            <Navigation />
+            <Navigation loggedIn={loggedIn} />
           </div>  
         </header>
       </Route>

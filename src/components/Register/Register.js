@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Preloader from '../Preloader/Preloader.js';
 import InfoMessages from '../InfoMessages/InfoMessages.js';
 import './Register.css';
 
-function Register({ onRegister, infoMessages }) {
+function Register({ onRegister, isLoading, infoMessages }) {
   const stateSchema = {
     name: { value: '', error: ''},
     email: { value: '', error: ''},
@@ -105,19 +106,19 @@ function Register({ onRegister, infoMessages }) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    if (!data.name || !data.email || !data.password) { 
+    if (!data.name || !data.email || !data.password) {
       return; 
-    } 
-
+    }
+    
     onRegister(data)
       .catch(err => {
         console.log(`Некорректно заполнено одно из полей: ${err}`);
-      })
+      })  
   }
 
   return(
     <div className="register">
-      <form className="form" name="signup" onSubmit={handleSubmit} noValidate>
+      {isLoading ? <Preloader /> : <form className="form" name="signup" onSubmit={handleSubmit} noValidate>
       <label className="form__label">Имя</label>
       <input className="form__input" type="text" name="name" 
       value={state.name.value} onChange={handleChange} required />
@@ -136,7 +137,7 @@ function Register({ onRegister, infoMessages }) {
       <p className="form__info">Уже зарегистрированы?
         <Link className="form__link" to="/signin"> Войти</Link>
       </p>
-    </form>
+    </form>}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './InfoMessages.css';
 
-function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessages }) {
+function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessages, infoProfileUpdateMessages }) {
   const message = falseLoading ? falseLoading && 'Во время запроса произошла ошибка. Подождите немного и попробуйте ещё раз.' : (infoMoviesMessages && 'Ничего не найдено') || (infoSavedMoviesMessages && 'Ничего не найдено');
 
   const cssRules = {
@@ -29,6 +29,30 @@ function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessage
     padding: 0,
   };
 
+  const cssRules3 = {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: 30,
+    marginBottom: -170,
+    minHeight: 25,
+  };
+
+  const cssRules4 = {
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 20,
+    textAlign: 'center',
+    color: '#EE3465',
+  };
+
+  const [alert, setAlert] = React.useState(true);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setAlert(false);
+    }, 3000);
+  }, []);  
+
   return (
     <Switch>
       <Route path="/(movies|saved-movies)">
@@ -37,14 +61,21 @@ function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessage
         </div>
       </Route>
       <Route path="/profile">
-        <div className="info" style={cssRules}>
+        {infoProfileUpdateMessages 
+        ? 
+        alert && <div className="info" style={cssRules3}>
+          <span className="info__message" style={cssRules4}>Данные профиля изменены</span>
+        </div> 
+        : 
+        alert && <div className="info" style={cssRules}>
           <span className="info__message" style={cssRules1}>Что-то пошло не так...</span>
         </div>
+        }
       </Route>
       <Route path="/(signup|signin)">
-        <div className="info" style={cssRules2}>
+        {alert && <div className="info" style={cssRules2}>
           <span className="info__message" style={cssRules1}>Что-то пошло не так...</span>
-        </div>
+        </div>}
       </Route>
     </Switch>
   );
