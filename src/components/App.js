@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import React from 'react';
 import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import Header from './Header/Header.js';
@@ -114,6 +113,7 @@ function App() {
     MoviesApi.getInitialCards()
       .then((movie) => {
         localStorage.setItem('movies', JSON.stringify(movie));
+        setMovies(JSON.parse(localStorage.getItem('movies')));
       })
       .catch((err) => {
         console.log(`Ошибка при загрузке: ${err}`);
@@ -123,30 +123,40 @@ function App() {
   }, []);
 
   React.useEffect(() => {
-    const token=localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     if (loggedIn) {
       setIsLoading(true);
-      MainApi.getMovies(token)
-        .then(() => {
-          setMovies(JSON.parse(localStorage.getItem('movies')));
-        })
-        .catch((err) => {
-          console.log(`Ошибка при загрузке: ${err}`);
-          setFalseLoading(true);
-        })
-        .finally(() => setIsLoading(false));
-    }    
-  }, [loggedIn]);
+      Promise.all([
+        MainApi.getMovies(token),
+        MainApi.getUserInfo(token)
+      ]).then((values) => {
+        const [savedMovies, userInfo] = values;
+        setSavedMovies(savedMovies);
+        setCurrentUser(userInfo);
+        setInfoProfileMessages(false);
+        localStorage.setItem('user', JSON.stringify(userInfo));
+      })
+      .catch((err) => {
+        console.log(`Ошибка при загрузке: ${err}`);
+        setInfoProfileMessages(true);
+      }) 
+      .finally(() => {
+        setIsLoading(false);
+      });
+    }
+
+  }, [loggedIn, currentUser._id]);
 
    React.useEffect(() => {
     if (location.pathname === ('/movies')) { 
       setArr(movies);
       setInfoMoviesMessages(false);
+      setFilteredMovies(JSON.parse(localStorage.getItem('filtered')));
     } else if (location.pathname === ('/saved-movies')) {
       setArr(savedMovies);
       setInfoSavedMoviesMessages(false);
     }
-  }, [location.pathname, movies]);
+  }, [location.pathname]);
 
   const handleSearch = () => {
     const filtered = arr.filter((movie) => {
@@ -168,14 +178,12 @@ function App() {
       localStorage.setItem('filtered', JSON.stringify(filtered)); 
     } else if (location.pathname === ('/saved-movies')) {
       setSavedMovies(filtered);
-      localStorage.setItem('saved', JSON.stringify(filtered));
     }
   };
 
   const handleCheck = () => {
     if (location.pathname === '/movies') {
-      const arr = JSON.parse(localStorage.getItem('filtered'));
-      const filtered = arr.filter((movie) => {
+      const filtered = filteredMovies.filter((movie) => {
         if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
           return false
         } else {
@@ -196,12 +204,11 @@ function App() {
       }
     }
     if (location.pathname === '/saved-movies') {
-      const arr = JSON.parse(localStorage.getItem('saved'));
-      const filtered = arr.filter((movie) => {
+      const filtered = savedMovies.filter((movie) => {
         if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
           return false
         } else {
-          return  movie.duration <= 40 
+          return (movie.nameRU && movie.duration <= 40) || (movie.nameEN && movie.duration <= 40) || (movie.director && movie.duration <= 40) || (movie.country && movie.duration <= 40) || (movie.description && movie.duration <= 40)
         } 
       });
       if (filtered.length === 0) {
@@ -229,8 +236,8 @@ function App() {
   };
 
   const deleteMovie = (movie) => {
-    const movieId = savedMovies.find((item) => item.id === movie.id)._id;
     const token=localStorage.getItem('token');
+    const movieId = savedMovies.find((item) => item.id === movie.id)._id;
     MainApi.deleteMovie(token, movieId)
       .then((res) => {
         if (res.message === 'Фильм удалён') {
@@ -240,22 +247,6 @@ function App() {
       })
       .catch(err => console.log(`Ошибка при удалении фильма: ${err}`));
   };
-
-  React.useEffect(() => {
-    const token=localStorage.getItem('token');
-    if (loggedIn) {
-      MainApi.getUserInfo(token) 
-        .then((data) => { 
-          setCurrentUser(data);
-          setInfoProfileMessages(false);
-          localStorage.setItem('user', JSON.stringify(data)); 
-        }) 
-        .catch((err) => {
-          console.log(`Ошибка при загрузке: ${err}`);
-          setInfoProfileMessages(true);
-        }); 
-    }   
-  }, [loggedIn]);
 
   const handleUpdateUser = (info) => {
     const token=localStorage.getItem('token');

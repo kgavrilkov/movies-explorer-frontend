@@ -11,7 +11,7 @@ function Profile({ onUpdateUser, isLoading, infoProfileMessages, infoProfileUpda
   const [email, setEmail] = React.useState(currentUser.email);
   const profileNameRef = React.useRef(name);
   const profileEmailRef = React.useRef(email);
-
+  
   React.useEffect(() => {
     profileNameRef.current.value = name;
     profileEmailRef.current.value = email;
@@ -72,7 +72,7 @@ function Profile({ onUpdateUser, isLoading, infoProfileMessages, infoProfileUpda
   React.useEffect(() => {
     if (isDirty) {
       setDisable(validateState());
-    }
+    } 
   }, [state, isDirty]);
 
   const handleNameChange = React.useCallback(event => {
@@ -96,18 +96,24 @@ function Profile({ onUpdateUser, isLoading, infoProfileMessages, infoProfileUpda
         error = validationStateSchema.name.validator.error;
       }
     }
+    
     setState(prevState => ({
       ...prevState,
       name: { value, error },
-    })); 
+    }));
   }, [validationStateSchema]);
 
   const handleEmailChange = React.useCallback(event => {
     setIsDirty(true);
 
-    setEmail(event.target.value);
+    setEmail(event.target.value)
 
     const value = event.target.value;
+
+    if (value === currentUser.email) {
+      setDisable(true);
+      return;
+    }
 
     let error = '';
     if (validationStateSchema.email.required) {
@@ -123,12 +129,12 @@ function Profile({ onUpdateUser, isLoading, infoProfileMessages, infoProfileUpda
         error = validationStateSchema.email.validator.error;
       }
     }
+
     setState(prevState => ({
       ...prevState,
       email: { value, error },
     })); 
   }, [validationStateSchema]);
-
 
   const handleSubmit = (evt) => { 
     evt.preventDefault();
@@ -146,7 +152,7 @@ function Profile({ onUpdateUser, isLoading, infoProfileMessages, infoProfileUpda
             <label className="profile__label">Имя</label>
             <div className="profile__input-item">
               <input className="profile__input" type="text" name="name" ref={profileNameRef}
-              value={state.name.value} onChange={handleNameChange} required /> 
+              value={state.name.value} onChange={handleNameChange} required />
               {state.name.error && <span style={errorStyle1}>{state.name.error}</span>}
             </div>
           </div>
