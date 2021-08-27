@@ -4,6 +4,14 @@ import SearchForm from '../SearchForm/SearchForm.js';
 import Preloader from '../Preloader/Preloader.js';
 import InfoMessages from '../InfoMessages/InfoMessages.js';
 import MoviesCardList from '../MoviesCardList/MoviesCardList.js';
+import { 
+  VISIBLE_MOVIES_MOBILE,
+  MOVIES_TO_LOAD_MOBILE,
+  VISIBLE_MOVIES_TABLET,
+  MOVIES_TO_LOAD_TABLET,
+  VISIBLE_MOVIES_DESKTOP,
+  MOVIES_TO_LOAD_DESKTOP 
+} from '../../utils/constants';
 
 function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, data, handleSearch, handleCheck, savedMovies, saveMovie, deleteMovie }) {
   const [displayedMovies, setDisplayedMovies] = React.useState('');
@@ -13,25 +21,25 @@ function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, da
 
   React.useEffect(() => {
     if (tablet) {
-      setDisplayedMovies(8);
+      setDisplayedMovies(VISIBLE_MOVIES_TABLET);
     }
     if (desktop) {
-      setDisplayedMovies(16);
+      setDisplayedMovies(VISIBLE_MOVIES_DESKTOP);
     }
     if (mobile) {
-      setDisplayedMovies(5);
+      setDisplayedMovies(VISIBLE_MOVIES_MOBILE);
     }
   }, [mobile, tablet, desktop]);
 
   const allMovies = () => {
     if (mobile) {
-      setDisplayedMovies(displayedMovies + 2);
+      setDisplayedMovies(displayedMovies + MOVIES_TO_LOAD_MOBILE);
     }
     if (tablet) {
-      setDisplayedMovies(displayedMovies + 2);
+      setDisplayedMovies(displayedMovies + MOVIES_TO_LOAD_TABLET);
     }
     if (desktop) {
-      setDisplayedMovies(displayedMovies + 4);
+      setDisplayedMovies(displayedMovies + MOVIES_TO_LOAD_DESKTOP);
     }
   };
 

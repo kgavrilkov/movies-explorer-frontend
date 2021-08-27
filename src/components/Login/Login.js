@@ -62,7 +62,7 @@ function Login({ onLogin, isLoading, infoLoginMessages }) {
   React.useEffect(() => {
     if (isDirty) {
       setDisable(validateState());
-    }
+    } 
   }, [state, isDirty, validateState]);
 
   const handleChange = React.useCallback(event => {
@@ -96,8 +96,8 @@ function Login({ onLogin, isLoading, infoLoginMessages }) {
     }));
   }, [validationStateSchema]);
 
-  const handleSubmit = (evt) => { 
-    evt.preventDefault(); 
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
     if (!data.email || !data.password) { 
       return; 
     } 
@@ -105,7 +105,7 @@ function Login({ onLogin, isLoading, infoLoginMessages }) {
     onLogin(data) 
       .catch(err => { 
         console.log(`Пользователь с email не найден: ${err}`); 
-      }) 
+      })
   }
 
   return(

@@ -57,7 +57,7 @@ export const saveMovie = (token, movie) => {
       trailer: movie.trailerLink,
       image: URL + movie.image.url,
       thumbnail: URL + movie.image.formats.thumbnail.url,
-      movieId: movie.id
+      movieId: movie.id,
     })
   })
   .then(getResponseData)

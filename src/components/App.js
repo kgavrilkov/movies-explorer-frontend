@@ -15,6 +15,7 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute.js';
 import * as MoviesApi from '../utils/MoviesApi.js';
 import * as MainApi from '../utils/MainApi.js';
 import * as auth from '../utils/auth.js';
+import { SHORT_MOVIE_DURATION } from '../utils/constants';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -48,8 +49,10 @@ function App() {
             if (location.pathname === '/signin') {
               history.push('/movies'); 
             } else if (location.pathname === '/movies') {
+              setMovies(JSON.parse(localStorage.getItem('movies')));
               history.push('/movies');
             } else if (location.pathname === '/saved-movies') {
+              setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
               history.push('/saved-movies');
             } else if (location.pathname === '/profile') {
               setCurrentUser(JSON.parse(localStorage.getItem('user')));
@@ -104,6 +107,7 @@ function App() {
   const handleSignOut = () => { 
     localStorage.removeItem('token');  
     setLoggedIn(false);
+    localStorage.removeItem('filtered');
     setFilteredMovies([]);
     history.push('/');
   };
@@ -131,6 +135,7 @@ function App() {
         MainApi.getUserInfo(token)
       ]).then((values) => {
         const [savedMovies, userInfo] = values;
+        localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
         setSavedMovies(savedMovies);
         setCurrentUser(userInfo);
         setInfoProfileMessages(false);
@@ -145,13 +150,15 @@ function App() {
       });
     }
 
-  }, [loggedIn, currentUser._id]);
+  }, [loggedIn]);
 
-   React.useEffect(() => {
+  React.useEffect(() => {
     if (location.pathname === ('/movies')) { 
       setArr(movies);
       setInfoMoviesMessages(false);
-      setFilteredMovies(JSON.parse(localStorage.getItem('filtered')));
+      if (JSON.parse(localStorage.getItem('filtered') !== null)) {
+        setFilteredMovies(JSON.parse(localStorage.getItem('filtered')));
+      }
     } else if (location.pathname === ('/saved-movies')) {
       setArr(savedMovies);
       setInfoSavedMoviesMessages(false);
@@ -184,11 +191,7 @@ function App() {
   const handleCheck = () => {
     if (location.pathname === '/movies') {
       const filtered = filteredMovies.filter((movie) => {
-        if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
-          return false
-        } else {
-          return (movie.nameRU && movie.duration <= 40) || (movie.nameEN && movie.duration <= 40) || (movie.director && movie.duration <= 40) || (movie.country && movie.duration <= 40) || (movie.description && movie.duration <= 40)
-          } 
+        return movie.duration <= SHORT_MOVIE_DURATION 
       });
       if (filtered.length === 0) {
         setInfoMoviesMessages(true);
@@ -197,19 +200,11 @@ function App() {
         setInfoMoviesMessages(false);
         setInfoSavedMoviesMessages(false);
       }
-      if (location.pathname === ('/movies')) {
-        setFilteredMovies(filtered);
-      } else if (location.pathname === ('/saved-movies')) {
-        setSavedMovies(filtered);
-      }
+      setFilteredMovies(filtered);
     }
     if (location.pathname === '/saved-movies') {
       const filtered = savedMovies.filter((movie) => {
-        if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
-          return false
-        } else {
-          return (movie.nameRU && movie.duration <= 40) || (movie.nameEN && movie.duration <= 40) || (movie.director && movie.duration <= 40) || (movie.country && movie.duration <= 40) || (movie.description && movie.duration <= 40)
-        } 
+        return movie.duration <= SHORT_MOVIE_DURATION  
       });
       if (filtered.length === 0) {
         setInfoMoviesMessages(true);
@@ -218,11 +213,7 @@ function App() {
         setInfoMoviesMessages(false);
         setInfoSavedMoviesMessages(false);
       }
-      if (location.pathname === ('/movies')) {
-        setFilteredMovies(filtered);
-      } else if (location.pathname === ('/saved-movies')) {
-        setSavedMovies(filtered);
-      }
+      setSavedMovies(filtered);
     }
   };
 

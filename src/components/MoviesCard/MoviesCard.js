@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { URL } from '../../utils/MainApi.js'
+import { URL } from '../../utils/MainApi.js';
 import './MoviesCard.css';
 
 function MoviesCard({ movie, savedMovies, saveMovie, deleteMovie }) {
