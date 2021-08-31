@@ -1,13 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './SearchForm.css';
 
-function SearchForm({ setFilterText, handleSearch, handleCheck }) {
+function SearchForm({ setFilterText, handleSearch, handleCheck, setSavedMovies, setInfoSavedMoviesMessages }) {
   const [name, setName] = React.useState('');
   const [nameDirty, setNameDirty] = React.useState(false);
   const [nameError, setNameError] = React.useState('Нужно ввести ключевое слово.');
   const [formValid, setFormValid] = React.useState(false);
   const [shortMovies, setShortMovies] =React.useState(false);
+  const location = useLocation();
 
   const focusHandler = (evt) => {
     if (evt.target.name) {
@@ -50,8 +52,14 @@ function SearchForm({ setFilterText, handleSearch, handleCheck }) {
       handleCheck();
       setShortMovies(true);
     } else {
-      handleSearch();
-      setShortMovies(false);
+      if (location.pathname === '/movies') {
+        handleSearch();
+        setShortMovies(false);
+      } else if (location.pathname === '/saved-movies') {
+        setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
+        setInfoSavedMoviesMessages(false);
+        setShortMovies(false);
+      }
     }
   };
 

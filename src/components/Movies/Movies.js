@@ -13,7 +13,7 @@ import {
   MOVIES_TO_LOAD_DESKTOP 
 } from '../../utils/constants';
 
-function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, data, handleSearch, handleCheck, savedMovies, saveMovie, deleteMovie }) {
+function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, data, handleSearch, handleCheck, savedMovies, saveMovie, deleteMovie, setSavedMovies }) {
   const [displayedMovies, setDisplayedMovies] = React.useState('');
   const mobile = useMediaQuery({ query: `(max-width: 320px)` });
   const tablet = useMediaQuery({ query: `(max-width: 768px)` });
@@ -45,7 +45,7 @@ function Movies({ isLoading, falseLoading, setFilterText, infoMoviesMessages, da
 
   return(
     <div className="movies">
-      <SearchForm setFilterText={setFilterText} handleSearch={handleSearch} handleCheck={handleCheck} />
+      <SearchForm setFilterText={setFilterText} handleSearch={handleSearch} handleCheck={handleCheck} setSavedMovies={setSavedMovies} />
       {isLoading && <Preloader />}
       {infoMoviesMessages && <InfoMessages falseLoading={falseLoading} infoMoviesMessages={infoMoviesMessages} />}
       {falseLoading && <InfoMessages falseLoading={falseLoading} infoMoviesMessages={infoMoviesMessages} />}

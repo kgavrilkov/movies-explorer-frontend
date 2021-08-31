@@ -45,14 +45,6 @@ function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessage
     color: '#EE3465',
   };
 
-  const [alert, setAlert] = React.useState(true);
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setAlert(false);
-    }, 3000);
-  }, []);  
-
   return (
     <Switch>
       <Route path="/(movies|saved-movies)">
@@ -63,19 +55,19 @@ function InfoMessages({ falseLoading, infoMoviesMessages, infoSavedMoviesMessage
       <Route path="/profile">
         {infoProfileUpdateMessages 
         ? 
-        alert && <div className="info" style={cssRules3}>
+        <div className="info" style={cssRules3}>
           <span className="info__message" style={cssRules4}>Данные профиля изменены</span>
         </div> 
         : 
-        alert && <div className="info" style={cssRules}>
+        <div className="info" style={cssRules}>
           <span className="info__message" style={cssRules1}>Что-то пошло не так...</span>
         </div>
         }
       </Route>
       <Route path="/(signup|signin)">
-        {alert && <div className="info" style={cssRules2}>
+        <div className="info" style={cssRules2}>
           <span className="info__message" style={cssRules1}>Что-то пошло не так...</span>
-        </div>}
+        </div>
       </Route>
     </Switch>
   );

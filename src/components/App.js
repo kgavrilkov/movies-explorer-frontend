@@ -37,6 +37,8 @@ function App() {
   const location = useLocation();
   const [infoSavedMoviesMessages, setInfoSavedMoviesMessages] = React.useState(false);
   const [arr, setArr] = React.useState([]);
+  //const [checked, setChecked] = React.useState(false);
+  //const [checkedSaved, setCheckedSaved] = React.useState(false);
   
   const tokenCheck = React.useCallback(() => { 
     const token=localStorage.getItem('token'); 
@@ -188,6 +190,69 @@ function App() {
     }
   };
 
+  /*Разработка нового решения
+
+  Поиск фильма по ключевому слову
+
+  const searchMovies = () => {
+    const searchedMovies = movies.filter((movie) => {
+      if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
+        return false
+      } else {
+        return movie.nameRU.toLowerCase().includes(filterText) || movie.nameEN.toLowerCase().includes(filterText) || movie.director.toLowerCase().includes(filterText) || movie.country.toLowerCase().includes(filterText) || movie.description.toLowerCase().includes(filterText) 
+        } 
+    });
+    return searchedMovies
+  };
+  
+  Поиск короткометражного фильма
+  
+  const searchShortMovies = () => {
+    const shortMovies = movies.filter((movie) => {
+      return movie.duration <= SHORT_MOVIE_DURATION
+    });
+    return shortMovies
+  };
+
+  Поиск в зависимости от состояния чекбокса
+
+  const filterMovies = (checked) => {
+    if (checked) {
+      const filteredCheckbox = searchShortMovies();
+      return searchMovies(filteredCheckbox)
+    } else {
+      return searchMovies()
+    }
+  };
+
+  Фильтр фильмов по чекбоксу
+
+  const handleCheck = (evt) => {
+    setChecked(!checked);
+    if (!checked) {
+      let searchedMovies = localStorage.getItem('filtered');
+      const searchedByKeyWords = JSON.parse(localStorage.getItem('filtered'));
+      if (searchedByKeyWords.length === 0) {
+        setInfoMoviesMessages(true);
+        setInfoSavedMoviesMessages(true);
+      } else {
+        const shortMovies = searchShortMovies(searchedByKeyWords);
+        localStorage.setItem('searchedShortMovies', JSON.stringify(shortMovies));
+        setFilteredMovies(shortMovies);
+        setInfoMoviesMessages(false);
+        setInfoSavedMoviesMessages(false);
+      }
+    } else {
+      let searchedMovies = localStorage.getItem('filtered');
+      const searchedByKeyWords = JSON.parse(localStorage.getItem('filtered'));
+      setFilteredMovies(searchedByKeyWords);
+    }
+  };
+
+  Фильтр сохранённых фильмов
+  
+  */
+
   const handleCheck = () => {
     if (location.pathname === '/movies') {
       const filtered = filteredMovies.filter((movie) => {
@@ -228,7 +293,12 @@ function App() {
 
   const deleteMovie = (movie) => {
     const token=localStorage.getItem('token');
-    const movieId = savedMovies.find((item) => item.id === movie.id)._id;
+    let movieId
+    if (movie.id) {
+      movieId = savedMovies.find((item) => item.movieId === movie.id)._id;
+    } else {
+      movieId = savedMovies.find((item) => item.movieId === movie.movieId)._id;
+    }
     MainApi.deleteMovie(token, movieId)
       .then((res) => {
         if (res.message === 'Фильм удалён') {
@@ -278,6 +348,7 @@ function App() {
             handleSearch={handleSearch}
             handleCheck={handleCheck}
             savedMovies={savedMovies}
+            setSavedMovies={setSavedMovies}
             saveMovie={saveMovie}
             deleteMovie={deleteMovie}
           />
@@ -287,9 +358,11 @@ function App() {
             falseLoading={falseLoading}
             setFilterText={setFilterText}
             infoSavedMoviesMessages={infoSavedMoviesMessages}
+            setInfoSavedMoviesMessages={setInfoSavedMoviesMessages}
             handleSearch={handleSearch}
             handleCheck={handleCheck}
             savedMovies={savedMovies}
+            setSavedMovies={setSavedMovies}
             saveMovie={saveMovie}
             deleteMovie={deleteMovie}
           />
