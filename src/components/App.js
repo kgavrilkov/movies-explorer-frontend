@@ -15,7 +15,6 @@ import ProtectedRoute from './ProtectedRoute/ProtectedRoute.js';
 import * as MoviesApi from '../utils/MoviesApi.js';
 import * as MainApi from '../utils/MainApi.js';
 import * as auth from '../utils/auth.js';
-import { SHORT_MOVIE_DURATION } from '../utils/constants';
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -37,8 +36,8 @@ function App() {
   const location = useLocation();
   const [infoSavedMoviesMessages, setInfoSavedMoviesMessages] = React.useState(false);
   const [arr, setArr] = React.useState([]);
-  //const [checked, setChecked] = React.useState(false);
-  //const [checkedSaved, setCheckedSaved] = React.useState(false);
+  const [checked, setChecked] = React.useState(false);
+  const [filtered, setFiltered] = React.useState(false);
   
   const tokenCheck = React.useCallback(() => { 
     const token=localStorage.getItem('token'); 
@@ -162,6 +161,7 @@ function App() {
         setFilteredMovies(JSON.parse(localStorage.getItem('filtered')));
       }
     } else if (location.pathname === ('/saved-movies')) {
+      console.log(savedMovies);
       setArr(savedMovies);
       setInfoSavedMoviesMessages(false);
     }
@@ -175,109 +175,10 @@ function App() {
         return movie.nameRU.toLowerCase().includes(filterText) || movie.nameEN.toLowerCase().includes(filterText) || movie.director.toLowerCase().includes(filterText) || movie.country.toLowerCase().includes(filterText) || movie.description.toLowerCase().includes(filterText) 
         } 
     });
-    if (filtered.length === 0) {
-      setInfoMoviesMessages(true);
-      setInfoSavedMoviesMessages(true);
-    } else {
-      setInfoMoviesMessages(false);
-      setInfoSavedMoviesMessages(false);
-    }
     if (location.pathname === ('/movies')) {
       setFilteredMovies(filtered);
       localStorage.setItem('filtered', JSON.stringify(filtered)); 
     } else if (location.pathname === ('/saved-movies')) {
-      setSavedMovies(filtered);
-    }
-  };
-
-  /*Разработка нового решения
-
-  Поиск фильма по ключевому слову
-
-  const searchMovies = () => {
-    const searchedMovies = movies.filter((movie) => {
-      if (movie.nameRU == null || movie.nameEN == null || movie.director == null || movie.country == null || movie.description ==null) {
-        return false
-      } else {
-        return movie.nameRU.toLowerCase().includes(filterText) || movie.nameEN.toLowerCase().includes(filterText) || movie.director.toLowerCase().includes(filterText) || movie.country.toLowerCase().includes(filterText) || movie.description.toLowerCase().includes(filterText) 
-        } 
-    });
-    return searchedMovies
-  };
-  
-  Поиск короткометражного фильма
-  
-  const searchShortMovies = () => {
-    const shortMovies = movies.filter((movie) => {
-      return movie.duration <= SHORT_MOVIE_DURATION
-    });
-    return shortMovies
-  };
-
-  Поиск в зависимости от состояния чекбокса
-
-  const filterMovies = (checked) => {
-    if (checked) {
-      const filteredCheckbox = searchShortMovies();
-      return searchMovies(filteredCheckbox)
-    } else {
-      return searchMovies()
-    }
-  };
-
-  Фильтр фильмов по чекбоксу
-
-  const handleCheck = (evt) => {
-    setChecked(!checked);
-    if (!checked) {
-      let searchedMovies = localStorage.getItem('filtered');
-      const searchedByKeyWords = JSON.parse(localStorage.getItem('filtered'));
-      if (searchedByKeyWords.length === 0) {
-        setInfoMoviesMessages(true);
-        setInfoSavedMoviesMessages(true);
-      } else {
-        const shortMovies = searchShortMovies(searchedByKeyWords);
-        localStorage.setItem('searchedShortMovies', JSON.stringify(shortMovies));
-        setFilteredMovies(shortMovies);
-        setInfoMoviesMessages(false);
-        setInfoSavedMoviesMessages(false);
-      }
-    } else {
-      let searchedMovies = localStorage.getItem('filtered');
-      const searchedByKeyWords = JSON.parse(localStorage.getItem('filtered'));
-      setFilteredMovies(searchedByKeyWords);
-    }
-  };
-
-  Фильтр сохранённых фильмов
-  
-  */
-
-  const handleCheck = () => {
-    if (location.pathname === '/movies') {
-      const filtered = filteredMovies.filter((movie) => {
-        return movie.duration <= SHORT_MOVIE_DURATION 
-      });
-      if (filtered.length === 0) {
-        setInfoMoviesMessages(true);
-        setInfoSavedMoviesMessages(true);
-      } else {
-        setInfoMoviesMessages(false);
-        setInfoSavedMoviesMessages(false);
-      }
-      setFilteredMovies(filtered);
-    }
-    if (location.pathname === '/saved-movies') {
-      const filtered = savedMovies.filter((movie) => {
-        return movie.duration <= SHORT_MOVIE_DURATION  
-      });
-      if (filtered.length === 0) {
-        setInfoMoviesMessages(true);
-        setInfoSavedMoviesMessages(true);
-      } else {
-        setInfoMoviesMessages(false);
-        setInfoSavedMoviesMessages(false);
-      }
       setSavedMovies(filtered);
     }
   };
@@ -344,13 +245,17 @@ function App() {
             falseLoading={falseLoading}
             setFilterText={setFilterText}
             infoMoviesMessages={infoMoviesMessages}
+            setInfoMoviesMessages={setInfoMoviesMessages}
+            setInfoSavedMoviesMessages={setInfoSavedMoviesMessages}
             data={filteredMovies}
             handleSearch={handleSearch}
-            handleCheck={handleCheck}
             savedMovies={savedMovies}
-            setSavedMovies={setSavedMovies}
             saveMovie={saveMovie}
             deleteMovie={deleteMovie}
+            checked={checked}
+            setChecked={setChecked}
+            filtered={filtered}
+            setFiltered={setFiltered}
           />
           <ProtectedRoute path="/saved-movies"
             component={SavedMovies}
@@ -359,12 +264,15 @@ function App() {
             setFilterText={setFilterText}
             infoSavedMoviesMessages={infoSavedMoviesMessages}
             setInfoSavedMoviesMessages={setInfoSavedMoviesMessages}
+            setInfoMoviesMessages={setInfoMoviesMessages}
             handleSearch={handleSearch}
-            handleCheck={handleCheck}
             savedMovies={savedMovies}
-            setSavedMovies={setSavedMovies}
             saveMovie={saveMovie}
             deleteMovie={deleteMovie}
+            checked={checked}
+            setChecked={setChecked}
+            filtered={filtered}
+            setFiltered={setFiltered}
           />
           <ProtectedRoute path="/profile" 
             component={Profile}

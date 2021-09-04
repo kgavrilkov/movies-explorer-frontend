@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './SearchForm.css';
 
-function SearchForm({ setFilterText, handleSearch, handleCheck, setSavedMovies, setInfoSavedMoviesMessages }) {
+function SearchForm({ setFilterText, handleSearch, setChecked }) {
   const [name, setName] = React.useState('');
   const [nameDirty, setNameDirty] = React.useState(false);
   const [nameError, setNameError] = React.useState('Нужно ввести ключевое слово.');
@@ -49,17 +49,11 @@ function SearchForm({ setFilterText, handleSearch, handleCheck, setSavedMovies, 
 
   const selectShortMovies = (evt) => {
     if (evt.target.checked) {
-      handleCheck();
+      setChecked(true);
       setShortMovies(true);
     } else {
-      if (location.pathname === '/movies') {
-        handleSearch();
-        setShortMovies(false);
-      } else if (location.pathname === '/saved-movies') {
-        setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
-        setInfoSavedMoviesMessages(false);
-        setShortMovies(false);
-      }
+      setChecked(false);
+      setShortMovies(false); 
     }
   };
 
