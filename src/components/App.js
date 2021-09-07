@@ -119,13 +119,20 @@ function App() {
       .then((movie) => {
         localStorage.setItem('movies', JSON.stringify(movie));
         setMovies(JSON.parse(localStorage.getItem('movies')));
+        if (location.pathname === ('/movies')) { 
+          setArr(movies);
+          setInfoMoviesMessages(false);
+          if (JSON.parse(localStorage.getItem('filtered') !== null)) {
+            setFilteredMovies(JSON.parse(localStorage.getItem('filtered')));
+          }
+        }
       })
       .catch((err) => {
         console.log(`Ошибка при загрузке: ${err}`);
         setFalseLoading(true);
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [location.pathname]);
 
   React.useEffect(() => {
     const token = localStorage.getItem('token');
@@ -138,6 +145,10 @@ function App() {
         const [savedMovies, userInfo] = values;
         localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
         setSavedMovies(savedMovies);
+        if (location.pathname === ('/saved-movies')) {
+          setArr(savedMovies);
+          setInfoSavedMoviesMessages(false);
+        }
         setCurrentUser(userInfo);
         setInfoProfileMessages(false);
         localStorage.setItem('user', JSON.stringify(userInfo));
@@ -150,22 +161,7 @@ function App() {
         setIsLoading(false);
       });
     }
-
-  }, [loggedIn]);
-
-  React.useEffect(() => {
-    if (location.pathname === ('/movies')) { 
-      setArr(movies);
-      setInfoMoviesMessages(false);
-      if (JSON.parse(localStorage.getItem('filtered') !== null)) {
-        setFilteredMovies(JSON.parse(localStorage.getItem('filtered')));
-      }
-    } else if (location.pathname === ('/saved-movies')) {
-      console.log(savedMovies);
-      setArr(savedMovies);
-      setInfoSavedMoviesMessages(false);
-    }
-  }, [location.pathname]);
+  }, [loggedIn, location.pathname]);
 
   const handleSearch = () => {
     const filtered = arr.filter((movie) => {
