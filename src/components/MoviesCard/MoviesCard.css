@@ -5,7 +5,8 @@
 
 .card__image {
   width: 100%;
-  border-radius: 12px 12px 0 0;
+  height: 151px;
+  border-radius: 10px 10px 0 0;
 }
 
 .card__content {
@@ -16,6 +17,7 @@
 }
 
 .card__title {
+  max-width: 206px;
   margin: 0;
   font-style: normal;
   font-weight: 500;
@@ -73,18 +75,18 @@
 
 @media screen and (max-width: 1250px) {
   .card__image {
-    border-radius: 17px 17px 0 0;
+    height: 190px;
   }
 }
 
 @media screen and (max-width: 600px) {
   .card__image {
-    border-radius: 27px 27px 0 0;
+    height: 250px;
   }
 }
 
 @media screen and (max-width: 400px) {
   .card__image {
-    border-radius: 18px 18px 0 0;
+    height: 168px;
   }
 }

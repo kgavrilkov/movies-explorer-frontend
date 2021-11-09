@@ -1,24 +1,76 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './SearchForm.css';
 
-function SearchForm() {
-  const [isSwitched, setIsSwitched] = React.useState(false);
+function SearchForm({ setFilterText, handleSearch, setChecked }) {
+  const [name, setName] = React.useState('');
+  const [nameDirty, setNameDirty] = React.useState(false);
+  const [nameError, setNameError] = React.useState('Нужно ввести ключевое слово.');
+  const [formValid, setFormValid] = React.useState(false);
+  const [shortMovies, setShortMovies] =React.useState(false);
+  const location = useLocation();
 
-  function handleSwitchClick() {
-    setIsSwitched(!isSwitched);
-  }
+  const focusHandler = (evt) => {
+    if (evt.target.name) {
+      setNameDirty(true);
+    } 
+  };
 
-  const className = `finder__switch-button ${isSwitched ? 'finder__switch-button_active' : 'finder__switch-button'}`;
+  const nameHandler = (evt) => {
+    setName(evt.target.value);
+    setNameError(false);
+    setFilterText(evt.target.value.toLowerCase());
+  };
+
+  const errorStyle = {
+    marginTop: -10,
+    marginLeft: 10,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 10,
+    lineHeight: 1.2,
+    color: '#EE3465',
+  };
+
+  React.useEffect(() => {
+    if (nameError) {
+      setFormValid(false);
+    } else {
+      setFormValid(true);
+    }
+  }, [nameError]);
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleSearch();
+    setName('');
+  };
+
+  const selectShortMovies = (evt) => {
+    if (evt.target.checked) {
+      setChecked(true);
+      setShortMovies(true);
+    } else {
+      setChecked(false);
+      setShortMovies(false); 
+    }
+  };
 
   return(
     <section className="finder">
       <div className="container container_presentation">
-        <form className="finder__form" noValidate>
-          <input type="text" className="finder__input" required placeholder="Фильм" />
-          <button type="submit" className="finder__button"></button>
+        <form className="finder__form" onSubmit={(evt) => handleSubmit(evt)} noValidate>
+          <div className="finder__input-section">
+            <input className="finder__input" type="text" name="name" 
+            value={name} onFocus={evt => focusHandler(evt)} 
+            onChange={evt => nameHandler(evt)} required placeholder="Фильм" />
+            {(nameDirty && nameError) && <span style={errorStyle}>{nameError}</span>}
+          </div>
+          <button type="submit" className="finder__button" disabled={!formValid}></button>
         </form>
         <div className="finder__switch-section">
-          <button className={className} onClick={handleSwitchClick}></button>
+          <input type="checkbox" onChange={evt => selectShortMovies(evt)} />
           <span className="finder__switch-section-title">Короткометражки</span>
         </div>
         <hr className="finder__line" />

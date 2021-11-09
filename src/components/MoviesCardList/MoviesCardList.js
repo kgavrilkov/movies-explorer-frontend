@@ -1,54 +1,41 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import MoviesCard from '../MoviesCard/MoviesCard.js';
-import { cards } from '../../utils/cards.js';
-import { filteredCards } from '../../utils/cards.js';
 import './MoviesCardList.css';
 
-function MoviesCardList() {
-  const [cardCount, setCardCount] = React.useState(4);
+function MoviesCardList({ data, displayedMovies, allMovies, savedMovies, saveMovie, deleteMovie, filtered, setFiltered, setInfoMoviesMessages, setInfoSavedMoviesMessages }) {
+  const location = useLocation();
 
-  function handleAddClick() {
-    setCardCount(value => value + 4);
-  }
+  React.useEffect(() => {
+    if (data.length !== 0) {
+      setFiltered(true);
+      setInfoMoviesMessages(false);
+      setInfoSavedMoviesMessages(false);
+    } else {
+      setFiltered(false);
+      setInfoMoviesMessages(true);
+      setInfoSavedMoviesMessages(true);
+    }
+  }, [data]);
 
   return(
-    <Switch>
-      <Route path="/movies">
-        <section className="cards">
-          <div className="container container_cards">
-            <div className="cards__container">
-              {cards.slice(0, cardCount).map((card, id) => (
-                <MoviesCard 
-                  card={card}
-                  key={id}
-                />
-              ))}
-            </div>
-            {cardCount < cards.length ? (
-              <button className="cards__add-button" onClick={handleAddClick}>Ещё</button>
-            ) : (
-              <button style={{visibility: 'hidden'}} className="cards__add-button" onClick={handleAddClick}>Ещё</button>
-            )}
-          </div>
-        </section>
-      </Route>
-      <Route path="/saved-movies">
-        <section className="cards">
-          <div className="container container_cards">
-            <div className="cards__container">
-              {filteredCards.map((card, id) => (
-                <MoviesCard 
-                  card={card}
-                  key={id}
-                />
-              ))}
-            </div>
-            <button style={{visibility: 'hidden', marginBottom: '54px'}} className="cards__add-button" onClick={handleAddClick}>Ещё</button>
-          </div>
-        </section>
-      </Route>      
-    </Switch>
+    <section className="cards">
+      <div className="container container_cards">
+        <div className="cards__container">
+          {filtered ? data.slice(0, displayedMovies).map((movie, id) => (
+            <MoviesCard 
+              movie={movie}
+              key={id}
+              savedMovies={savedMovies}
+              saveMovie={saveMovie}
+              deleteMovie={deleteMovie}
+            />
+          )) : null}
+        </div>
+        {displayedMovies < data.length && <button className={location.pathname === ('/saved-movies') ? "hidden" : "cards__add-button"} onClick={allMovies}>Ещё</button>}
+      </div>
+    </section>
   );
 }
 
